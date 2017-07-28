@@ -9,9 +9,9 @@ import { getFileContents } from '~/helpers/fileUtils';
 
 export default class ImportKeystoreForm extends Component {
   static propTypes = {
-    setError: PropTypes.func.isRequired,
-    setLoading: PropTypes.func.isRequired,
-    onGetPrivateKey: PropTypes.func.isRequired,
+    setError: PropTypes.func,
+    setLoading: PropTypes.func,
+    onGetPrivateKey: PropTypes.func,
   }
   constructor(props) {
     super(props);

@@ -26,6 +26,7 @@ export default class MenuSystem extends Component {
     parentRoute: undefined,
   }
   constructor(props) {
+    console.log(props)
     super(props);
     this.state = { tab: 0 };
   }

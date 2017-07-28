@@ -1,47 +1,22 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'semantic-ui-react';
-import { createKeystore, updateKeystore, deleteKeystore } from '~/actions/keystore';
+import { autobind } from 'core-decorators';
 
-import ImportKeystoreModal from './import_keystore_modal';
+import { 
+  createKeystore, 
+  updateKeystore, 
+  deleteKeystore, 
+} from '~/actions/keystore';
 
-import KeystoreModal from './keystore_modal';
-import KeystoreCreationForm from './keystore_creation_form';
-
+import ImportKeystoreModal from './import_keystore_modal2';
+import KeystoreCreationForm from './create_keystore_modal2';
 import GenericTransaction from './generic_transaction';
 
-class KeystoreButtons extends Component {
-  static propTypes = {
-    createKeystore: PropTypes.func.isRequired,
-    keystores: PropTypes.array,
-  }
-  static defaultProps = {
-    size: undefined,
-    keystores: [],
-  }
-  render() {
-    return (
-      <span>
-        {!!this.props.keystores.length && <GenericTransaction /> }
-        <KeystoreModal
-          {...this.props}
-          submitFunc={this.props.createKeystore}
-          form={KeystoreCreationForm}
-          trigger={
-            <Button onClick={e => e.preventDefault()} basic icon="plus" content="Create" />
-          }
-        />
-        <ImportKeystoreModal
-          {...this.props}
-          trigger={
-            <Button onClick={e => e.preventDefault()} basic icon="upload" content="Import" />
-          }
-        />
-      </span>
-
-    );
-  }
-}
+import { 
+  Button, 
+  Modal,
+} from 'antd';
 
 const actions = {
   createKeystore,
@@ -49,4 +24,59 @@ const actions = {
   deleteKeystore,
 };
 
-export default connect(null, actions)(KeystoreButtons);
+@connect(null, actions)
+class KeystoreButtons extends Component {
+
+  static propTypes = {
+    createKeystore: PropTypes.func.isRequired,
+    keystores: PropTypes.array,
+  }
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      createVisible: false,
+      importVisible: false,
+    }
+  }
+
+  @autobind
+  onCreateClick() {
+    this.setState({ createVisible: true })
+  }
+
+  @autobind
+  onImportClick() {
+    this.setState({ importVisible: true })
+  }
+
+  render() {
+    const {
+      createVisible,
+      importVisible
+    } = this.state
+
+    return (
+      <div>
+        {this.props.keystores.length && <GenericTransaction /> }
+        <Button 
+          icon="plus" 
+          size="large"
+          onClick={this.onCreateClick}
+        >
+          Create
+        </Button>
+        <Button 
+          icon="upload" 
+          size="large"
+          onClick={this.onImportClick}
+        >
+          Import
+        </Button>
+        <ImportKeystoreModal visible={importVisible} {...this.props} />
+      </div>
+    )
+  }
+}
+
+export default KeystoreButtons

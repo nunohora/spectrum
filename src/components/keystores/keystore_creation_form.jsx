@@ -8,13 +8,15 @@ import KeystoreSelector from './keystore_selector';
 export default class KeystoreCreationForm extends Component {
   static propTypes = {
     hideMenu: PropTypes.bool,
-    formData: PropTypes.object.isRequired,
-    keystoreTypes: PropTypes.array.isRequired,
+    formData: PropTypes.object,
+    keystoreTypes: PropTypes.array,
   }
   static defaultProps = {
     hideMenu: false,
   }
   render() {
+    debugger
+
     const { hideMenu, formData, keystoreTypes } = this.props;
     const KeystoreTypeCreationForm = getKeystoreComponent({ type: 'creationForm', id: formData.type });
     const keystoreType = formData.type && keystoreTypes.find(ks => ks.id === formData.type);
