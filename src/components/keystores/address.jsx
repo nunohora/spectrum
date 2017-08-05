@@ -1,39 +1,43 @@
-import React, { PropTypes, Component } from 'react';
-import { Icon, Table, Header, Image } from 'semantic-ui-react';
-import EZModal from 'sui-react-ezmodal';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Image } from 'semantic-ui-react';
 
 import blockie from '~/helpers/blockie';
+import web3Connect from '~/helpers/web3/connect';
+
 import QrCode from '~/components/common/qr_code';
-
 import AddressBalances from './address_balances';
+import BaseTokenButton from './base_token';
+import TokenButton from './token';
 
-export default class KeystoreAddress extends Component {
-  static propTypes = {
-    address: PropTypes.object.isRequired,
-  };
-  render() {
-    const { address } = this.props;
-    return (
-      <Table.Row>
-        <Table.Cell width="1">
-          <Header as="h4" image style={{ whiteSpace: 'nowrap' }}>
-            <Image src={blockie(address.address)} shape="rounded" size="mini" />
-            <Header.Content>
-              {address.name}
-              <Header.Subheader>
-                <code style={{ fontSize: '0.8em' }}>{address.address}</code>
-                <EZModal
-                  size="small"
-                  header={address.name}
-                  content={<QrCode data={address.address} />}
-                  trigger={<Icon name={'qrcode'} style={{ cursor: 'pointer' }} />}
-                />
-              </Header.Subheader>
-            </Header.Content>
-          </Header>
-        </Table.Cell>
-        <AddressBalances address={address} />
-      </Table.Row>
-    );
-  }
+import { Card, Icon } from 'antd';
+
+const KeystoreAddressHeader = (keystore) =>
+  <div>
+      <Icon name={keystore.type.icon} />
+      <span>{keystore.type.name}</span>
+      <span>{keystore.type.subtitle}</span>
+  </div>
+
+const KeystoreAddress = ({ address, web3Redux, keystore }) =>
+  <Card
+    title={KeystoreAddressHeader(keystore)}
+    extra={<Image src={blockie(address.address)} shape="rounded" size="mini" />}
+  >
+    <code style={{ fontSize: '0.8em' }}>{address.address}</code>
+    <div>
+      {address.networks.map(network => (
+        <BaseTokenButton key={network.id} {...{ network, address, web3Redux }} />
+      ))}
+      {address.tokens.map(token => (
+        <TokenButton key={token.id} {...{ token, address, web3Redux }} />
+      ))}
+    </div>
+  </Card>
+
+KeystoreAddress.propTypes = {
+  address: PropTypes.object.isRequired,
+  web3Redux: PropTypes.object.isRequired,
 }
+
+export default web3Connect(KeystoreAddress)

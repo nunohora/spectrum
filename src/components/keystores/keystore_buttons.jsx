@@ -9,8 +9,8 @@ import {
   deleteKeystore, 
 } from '~/actions/keystore';
 
-import ImportKeystoreModal from './import_keystore_modal2';
-import KeystoreCreationForm from './create_keystore_modal2';
+import ImportKeystoreModal from './import_keystore_modal';
+import CreateKeystoreModal from './create_keystore_modal';
 import GenericTransaction from './generic_transaction';
 
 import { 
@@ -73,7 +73,11 @@ class KeystoreButtons extends Component {
         >
           Import
         </Button>
-        <ImportKeystoreModal visible={importVisible} {...this.props} />
+        <ImportKeystoreModal 
+          visible={importVisible}
+          closeModal={() => this.setState({ importVisible: false })}
+          {...this.props} 
+        />
       </div>
     )
   }

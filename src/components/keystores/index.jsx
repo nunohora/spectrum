@@ -19,30 +19,11 @@ import {
 
 const KeystoreItem = (props) =>
   props.keystores.map(keystore => 
-    <Segment key={keystore.id}>
-      <KeystoreModal
-        {...props}
-        header={`Edit Keystore: ${keystore.type.name}`}
-        submitFunc={props.updateKeystore}
-        removeFunc={props.deleteKeystore}
-        data={keystore}
-        form={KeystoreEditForm}
-        trigger={
-          <Label ribbon basic color={keystore.type.color} style={{ cursor: 'pointer' }}>
-            <Icon name={keystore.type.icon} />
-            {keystore.type.name}
-          </Label>
-        }
-      />
-      <Header size="tiny" disabled as="span">{keystore.type.subtitle}</Header>
-      <Table basic="very">
-        <Table.Body>
-          {keystore.addresses.map(address => (
-            <Address {...props} key={address.address} keystore={keystore} address={address} />
-          ))}
-        </Table.Body>
-      </Table>
-    </Segment>
+      <div>
+        {keystore.addresses.map(address => (
+          <Address {...props} key={address.address} keystore={keystore} address={address} />
+        ))}
+      </div>
   )
 
 const Keystores = (props) =>
@@ -72,9 +53,7 @@ const Keystores = (props) =>
           content="Please create or import a new keystore"
         />
         :
-        <Segment.Group style={{ background: 'white' }}>
-          {KeystoreItem(props)}
-        </Segment.Group>
+        KeystoreItem(props)
       }
     </Row>        
   </div>
